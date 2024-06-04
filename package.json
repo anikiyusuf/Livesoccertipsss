@@ -1,0 +1,26 @@
+{
+  "name": "livesoccertipsss",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000L\u0000i\u0000v\u0000e\u0000s\u0000o\u0000c\u0000c\u0000e\u0000r\u0000t\u0000i\u0000p\u0000s\u0000s\u0000s\u0000\r\u0000 \u0000#\u0000 \u0000L\u0000i\u0000v\u0000e\u0000s\u0000o\u0000c\u0000c\u0000e\u0000r\u0000t\u0000i\u0000p\u0000s\u0000s\u0000s\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.7.0",
+    "mongoose": "^8.4.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  }
+}
