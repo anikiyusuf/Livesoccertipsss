@@ -7,18 +7,22 @@ const express = require("express")
     Login,
     About,
     Contact, 
+    ForgetPassword,
+    ResetPassword,
     error,
     
 } = require("../controller/viewsController")
 const viewRouter = express.Router()
 
-viewRouter.get("/index" , homePage)
-viewRouter.get("/sign" , Sign)
-viewRouter.get("/payment" , Pay)
-viewRouter.get("/games" , Game) 
-viewRouter.get("/login" , Login)
-viewRouter.get("/about" , About) 
-viewRouter.get("/contact" , Contact) 
+viewRouter.get("/", homePage)
+viewRouter.get("/sign", Sign)
+viewRouter.get("/payment", Pay)
+viewRouter.get("/games", Game) 
+viewRouter.get("/login", Login)
+viewRouter.get("/about", About) 
+viewRouter.get("/contact", Contact) 
+viewRouter.get("/forgetpassword", ForgetPassword)
+viewRouter.get("/resetpassword", ResetPassword)
 viewRouter.get("/error", error )
 
 
