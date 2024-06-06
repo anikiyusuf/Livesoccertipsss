@@ -15,7 +15,7 @@ app.use(express.static("public"));
 // views 
 app.set('view engine', 'ejs');
 
-app.use("/", require("./routes/viewsRoutes"));
+app.use("/index", require("./routes/viewsRoutes"));
 app.use('/auth', userRouter);
 
 // Error handling middleware
