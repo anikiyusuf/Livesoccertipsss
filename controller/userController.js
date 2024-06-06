@@ -104,7 +104,7 @@ const forgetPassword = async (req, res) => {
 
         await user.save({ validateModifiedOnly: true }); // Validate only modified fields
 
-        const resetUrl = `https://livesoccertipsss-qnq2.onrender.com/auth/resetpassword/${resetToken}`;
+        const resetUrl = `https://livesoccertipsss-qnq2.onrender.com/resetpassword/${resetToken}`;
         const mailOptions = {
             to: user.email,
             from: 'livesoccertip@gmail.com',
