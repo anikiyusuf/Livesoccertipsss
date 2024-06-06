@@ -102,9 +102,9 @@ const forgetPassword = async (req, res) => {
         user.resetPasswordToken = resetPasswordToken;
         user.resetPasswordExpire = resetPasswordExpire;
 
-        await user.save({ validateModifiedOnly: true }); // Validate only modified fields
+        await user.save({ validateModifiedOnly: true });
 
-        const resetUrl = `https://livesoccertipsss-qnq2.onrender.com/resetpassword/${resetToken}`;
+        const resetUrl = `https://livesoccertipsss-qnq2.onrender.com/auth/resetpassword/${resetToken}`;
         const mailOptions = {
             to: user.email,
             from: 'livesoccertip@gmail.com',
@@ -116,14 +116,13 @@ const forgetPassword = async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        res.status(200)
-        .send({ message: 'Password reset link sent to email' })
-        // .render('resetpassword');
+        res.status(200).send({ message: 'Password reset link sent to email' });
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Internal server error', error: err });
     }
 };
+
 
 const resetPassword = async (req, res) => {
     try {
