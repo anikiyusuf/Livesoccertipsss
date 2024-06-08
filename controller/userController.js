@@ -117,6 +117,7 @@ const forgetPassword = async (req, res) => {
         await transporter.sendMail(mailOptions);
         res.status(200)
             .render('passwordsent');
+
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Internal server error', error: err });
@@ -142,7 +143,9 @@ const resetPassword = async (req, res) => {
             return res.status(400).send({ message: 'Passwords do not match' });
         }
 
+
         const salt = await bcrypt.genSalt(10);  // Generate a salt for hashing
+
         user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
@@ -161,8 +164,10 @@ const resetPassword = async (req, res) => {
     }
 };
 
-
 module.exports = { signup, login, logOut, forgetPassword, resetPassword };
+
+
+
 
 
 
