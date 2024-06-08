@@ -155,7 +155,7 @@ const resetPassword = async (req, res) => {
 
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-            .send({ message: "Password reset successful" });
+           .render('successful')
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: "Internal server error", error: err });
