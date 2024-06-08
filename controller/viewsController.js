@@ -17,12 +17,25 @@ const Pay = async (req,res) => {
     res.render('payment')
 }
 const Sign = async (req,res) => {
-    res.render('Sign')
+    res.render('sign')
 }
 
+const ForgetPassword = async(req,res) => {
+    res.render('forgetpassword')
+}
+const  ResetPassword = async(req, res) =>{
+    res.render('resetpassword')
+}
 
 const error = async (req,res) =>{
     res.render('error')
+}
+const PasswordSent = async (req,res) =>{
+    res.render('passwordsent')
+}
+
+const Successful = async (req,res) =>{
+    res.render('successful')
 }
 
 module.exports = {
@@ -33,5 +46,9 @@ module.exports = {
     Login,
     About,
     Contact,
+    ForgetPassword,
+    ResetPassword,
+    PasswordSent,
+    Successful,
     error,
 }
