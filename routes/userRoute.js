@@ -4,8 +4,8 @@ const userRouter = express.Router()
 
 userRouter.post('/sign' , signup)
 userRouter.post('/login' , login)
-userRouter.post("/forgotpassword", forgetPassword)
-userRouter.patch("/resetpassword/:resetToken", resetPassword)
+userRouter.post("/forgetpassword", forgetPassword)
+userRouter.patch("/resetpassword", resetPassword)
 
 
 
