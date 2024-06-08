@@ -34,6 +34,10 @@ const PasswordSent = async (req,res) =>{
     res.render('passwordsent')
 }
 
+const Successful = async (req,res) =>{
+    res.render('successful')
+}
+
 module.exports = {
     homePage,
     Sign,
@@ -45,5 +49,6 @@ module.exports = {
     ForgetPassword,
     ResetPassword,
     PasswordSent,
+    Successful,
     error,
 }

@@ -125,6 +125,7 @@ const forgetPassword = async (req, res) => {
 };
 
 
+
 const resetPassword = async (req, res) => {
     try {
         const { resetToken } = req.params;
@@ -144,18 +145,19 @@ const resetPassword = async (req, res) => {
             return res.status(400).send({ message: 'Passwords do not match' });
         }
 
-        user.password = await bcrypt.hash(password, 10);
+        const salt = await bcrypt.genSalt(10);  // Ensure you generate a salt for hashing
+        user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
-        
+
         // Use validateModifiedOnly to avoid validation error on unmodified fields
         await user.save({ validateModifiedOnly: true });
-        
+
         const token = createToken(user._id);
 
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-           .render('successful')
+            .render('successful');
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: "Internal server error", error: err });
