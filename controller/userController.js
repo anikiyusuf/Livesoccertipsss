@@ -1,24 +1,18 @@
-require('dotenv').config()
-const UserModel = require("../models/userModel")
-const jwt = require('jsonwebtoken')
-// const TokenModel = require("../models/viewModel")
+
+require('dotenv').config();
+const UserModel = require("../models/userModel");
+const jwt = require('jsonwebtoken');
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
 
+const JWT_TOKEN = process.env.JWT_TOKEN;
 
-
-
-// const bcryptSalt = process.env.BCRYPT_SALT;
-const JWT_TOKEN = process.env.JWT_TOKEN
-
-
-
-
-// this function is used to create token 
+// Function to create a token
 const createToken = (id) => {
-    return jwt.sign({ id } , JWT_TOKEN , { expiresIn : '1h', })
+    return jwt.sign({ id }, JWT_TOKEN, { expiresIn: '1h' });
 };
+
 const signup = async (req, res) => {
     try {
         const { firstName, lastName, email, password, confirm_password } = req.body;
@@ -32,16 +26,17 @@ const signup = async (req, res) => {
             return res.status(400).send({ message: "User already exists" });
         }
 
-        const user = new UserModel({ firstName, lastName, email, password });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = new UserModel({ firstName, lastName, email, password: hashedPassword });
         await user.save();
 
         const token = createToken(user._id);
 
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-            // .json({ user: user.toJSON(), token });
-            .render('payment')
-            //.json(user)
+            .render('payment');
 
     } catch (err) {
         console.error(err);
@@ -49,42 +44,46 @@ const signup = async (req, res) => {
     }
 };
 
-const login = async (req, res ) => {
-    try{
-            const { email , password } = req.body
-            const user = await UserModel.findOne({ email: email})
-   
-            if(!user) {
-                return res.status(400).send({ message : 'User not found'})
-            }
-            const validate = await bcrypt.compare(password, user.password)
-            if(!validate) {
-                return res.status(400).send({ message: 'Wrong password'});
-            }
-            const token = createToken(user._id)
-            res.status(200)
-             .cookie('jwt' , token, { maxAge: 3600000, httpOnly:true})
-             .render('games')
-            // res.json(user)
-}catch( err){
-    res.status(500)
-    res.json(err)
-}
-}
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(400).send({ message: 'User not found' });
+        }
+
+        const validate = await bcrypt.compare(password, user.password);
+        if (!validate) {
+            return res.status(400).send({ message: 'Wrong password' });
+        }
+
+        const token = createToken(user._id);
+        res.status(200)
+            .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
+            .render('games');
+
+    } catch (err) {
+        res.status(500);
+        res.json(err);
+    }
+};
 
 const logOut = (req, res) => {
     res.status(200)
-    .clearCookie('jwt', {httpOnly:true})
-    .send({message:'Successfully logged out'});
+        .clearCookie('jwt', { httpOnly: true })
+        .send({ message: 'Successfully logged out' });
 }
 
 const transporter = nodemailer.createTransport({
-    service:'Gmail',
-    auth:{
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASS
+    service: 'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     },
 });
+
+
 
 const forgetPassword = async (req, res) => {
     try {
@@ -116,15 +115,13 @@ const forgetPassword = async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        res.status(200).
-        render('passwordsent');
+        res.status(200)
+            .render('passwordsent');
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Internal server error', error: err });
     }
 };
-
-
 
 const resetPassword = async (req, res) => {
     try {
@@ -145,7 +142,7 @@ const resetPassword = async (req, res) => {
             return res.status(400).send({ message: 'Passwords do not match' });
         }
 
-        const salt = await bcrypt.genSalt(10);  // Ensure you generate a salt for hashing
+        const salt = await bcrypt.genSalt(10);  // Generate a salt for hashing
         user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
@@ -165,5 +162,7 @@ const resetPassword = async (req, res) => {
 };
 
 
+module.exports = { signup, login, logOut, forgetPassword, resetPassword };
 
-module.exports = { signup, login, logOut, resetPassword, forgetPassword}
+
+
