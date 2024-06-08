@@ -30,6 +30,9 @@ const  ResetPassword = async(req, res) =>{
 const error = async (req,res) =>{
     res.render('error')
 }
+const PasswordSent = async (req,res) =>{
+    res.render('passwordsent')
+}
 
 module.exports = {
     homePage,
@@ -41,5 +44,6 @@ module.exports = {
     Contact,
     ForgetPassword,
     ResetPassword,
+    PasswordSent,
     error,
 }
