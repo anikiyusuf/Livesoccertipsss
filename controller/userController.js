@@ -117,7 +117,7 @@ const forgetPassword = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
         res.status(200).
-        render('games');
+        render('passwordsent');
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: 'Internal server error', error: err });
