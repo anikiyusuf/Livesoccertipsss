@@ -115,15 +115,20 @@ const requestPasswordReset = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
+
         res.status(200).send({ message: "OTP sent to your email" });
 
+  
     } catch (err) {
         console.error(err);
         res.status(500).send({ message: "Internal server error", error: err.message });
     }
 };
 
-const verifyOtp = async (req, res) => {
+
+
+const resetPassword = async (req, res) => {
+
     try {
         const { email, otp } = req.body;
         const user = await UserModel.findOne({ email });
@@ -140,6 +145,16 @@ const verifyOtp = async (req, res) => {
         }
 
         res.status(200).send({ message: "OTP verified" });
+
+
+        const salt = await bcrypt.genSalt(10);  // Generate a salt for hashing
+
+        user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        // Use validateModifiedOnly to avoid validation error on unmodified fields
+      
 
     } catch (err) {
         console.error(err);
@@ -290,6 +305,9 @@ const changePassword = async (req, res) => {
 // };
 
 module.exports = { signup, login, logOut, requestPasswordReset, verifyOtp, changePassword};
+
+
+
 
 
 
