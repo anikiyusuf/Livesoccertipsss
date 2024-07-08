@@ -127,41 +127,41 @@ const requestPasswordReset = async (req, res) => {
 
 
 
-const resetPassword = async (req, res) => {
+// const resetPassword = async (req, res) => {
 
-    try {
-        const { email, otp } = req.body;
-        const user = await UserModel.findOne({ email });
+//     try {
+//         const { email, otp } = req.body;
+//         const user = await UserModel.findOne({ email });
 
-        if (!user) {
-            return res.status(400).send({ message: "User not found" });
-        }
+//         if (!user) {
+//             return res.status(400).send({ message: "User not found" });
+//         }
 
-        const currentDate = Date.now();
+//         const currentDate = Date.now();
         
-        // Verify OTP and expiration time
-        if (user.resetPasswordToken !== otp || user.resetPasswordExpires < currentDate) {
-            return res.status(400).send({ message: "Invalid or expired OTP" });
-        }
+//         // Verify OTP and expiration time
+//         if (user.resetPasswordToken !== otp || user.resetPasswordExpires < currentDate) {
+//             return res.status(400).send({ message: "Invalid or expired OTP" });
+//         }
 
-        res.status(200).send({ message: "OTP verified" });
+//         res.status(200).send({ message: "OTP verified" });
 
 
-        const salt = await bcrypt.genSalt(10);  // Generate a salt for hashing
+//         const salt = await bcrypt.genSalt(10);  // Generate a salt for hashing
 
-        user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
+//         user.password = await bcrypt.hash(password, salt);  // Hash the new password with the salt
+//         user.resetPasswordToken = undefined;
+//         user.resetPasswordExpire = undefined;
 
-        // Use validateModifiedOnly to avoid validation error on unmodified fields
+//         // Use validateModifiedOnly to avoid validation error on unmodified fields
       
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Internal server error", error: err.message });
-    }
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send({ message: "Internal server error", error: err.message });
+//     }
     
-};
+// };
 
 
 const changePassword = async (req, res) => {
@@ -304,7 +304,7 @@ const changePassword = async (req, res) => {
 //     }
 // };
 
-module.exports = { signup, login, logOut, requestPasswordReset, verifyOtp, changePassword};
+module.exports = { signup, login, logOut, requestPasswordReset, changePassword};
 
 
 
