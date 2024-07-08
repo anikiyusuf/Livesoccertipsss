@@ -55,6 +55,8 @@ git remote -v
 git push -f origin mastergit 
 
 Add this lines to the .env file 
-PORT = 3000
-MONGODB = mongodb+srv://anikiyusuf130:wMySIM2jrwSwD3yW@cluster0.8pazubt.mongodb.net/livescoccer?retryWrites=true&w=majority
-JWT_TOKEN = jssadwbnmwwjfnsehfw
+<!-- PORT=3000
+MONGODB=mongodb+srv://anikiyusuf130:Livesoccer11@cluster0.8pazubt.mongodb.net/livescoccer?retryWrites=true&w=majority&appName=Cluster0
+JWT_TOKEN=jssadwbnmwwjfnsehfw
+EMAIL_USER=anikiyusuf99@gmail.com
+EMAIL_PASS=atfwcpjephaojmld -->
