@@ -40,8 +40,8 @@ const signup = async (req, res) => {
         // Send token as a cookie and a success message
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-            .render('payment');
-            // .send({ message: 'Signup successful, please proceed to payment' });
+            // .render('payment');
+             .send({ message: 'Signup successful, please proceed to payment' });
 
     } catch (err) {
         if (err.code === 11000) {
