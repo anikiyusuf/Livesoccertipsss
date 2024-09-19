@@ -16,8 +16,8 @@ const Game = async (req,res) => {
 const Payment = async (req,res) => {
     res.render('payment')
 }
-const Sign = async (req,res) => {
-    res.render('sign')
+const Signup = async (req,res) => {
+    res.render('signup')
 }
 
 const ForgetPassword = async(req,res) => {
@@ -40,7 +40,7 @@ const Successful = async (req,res) =>{
 
 module.exports = {
     homePage,
-    Sign,
+    Signup,
     Payment,
     Game,
     Login,
