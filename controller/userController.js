@@ -42,8 +42,8 @@ const signup = async (req, res) => {
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
             .render('payment');
 
-    } catch (err) {
-        console.error(err);
+    }catch (err) {
+        console.error('Error during signup:', err);
         res.status(500).send({ message: "Internal server error", error: err.message });
     }
 };

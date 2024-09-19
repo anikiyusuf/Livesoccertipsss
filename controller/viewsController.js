@@ -13,7 +13,7 @@ const Login = async (req,res) => {
 const Game = async (req,res) => {
     res.render('games')
 }
-const Pay = async (req,res) => {
+const Payment = async (req,res) => {
     res.render('payment')
 }
 const Sign = async (req,res) => {
@@ -41,7 +41,7 @@ const Successful = async (req,res) =>{
 module.exports = {
     homePage,
     Sign,
-    Pay,
+    Payment,
     Game,
     Login,
     About,
