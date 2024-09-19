@@ -1,7 +1,9 @@
 /* styling for the nav-bar */
+
 header{
     background: linear-gradient(180deg,#302e94,#3e6fa8);
 }
+
 
 .navbar-brand{
     color: white;
