@@ -1,10 +1,7 @@
-
 require('dotenv').config();
 const UserModel = require("../models/userModel");
 const jwt = require('jsonwebtoken');
-const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const nodemailer = require('nodemailer');
 
 const JWT_TOKEN = process.env.JWT_TOKEN;
 
@@ -13,27 +10,34 @@ const createToken = (id) => {
     return jwt.sign({ id }, JWT_TOKEN, { expiresIn: '1h' });
 };
 
+// Signup function
 const signup = async (req, res) => {
     try {
         const { firstName, lastName, email, password, confirm_password } = req.body;
 
+        // Check if passwords match
         if (password !== confirm_password) {
             return res.status(400).send({ message: "Passwords do not match" });
         }
 
+        // Check if user already exists
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
             return res.status(400).send({ message: "User already exists" });
         }
 
+        // Hash the password before saving to DB
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        // Create new user and save to DB
         const user = new UserModel({ firstName, lastName, email, password: hashedPassword });
         await user.save();
 
+        // Create JWT token
         const token = createToken(user._id);
 
+        // Send token as a cookie
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
             .render('payment');
@@ -44,11 +48,12 @@ const signup = async (req, res) => {
     }
 };
 
-
+// Login function
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // Find the user by email
         const user = await UserModel.findOne({ email });
 
         if (!user) {
@@ -56,24 +61,30 @@ const login = async (req, res) => {
             return res.status(400).send({ message: 'User not found' });
         }
 
-        const isPasswordValid = await user.isValidPassword(password);
+        // Compare the entered password with the stored hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             console.log('Login failed: Wrong password');
-            return res.status(400).send({ message: 'Wrong password' });
+            return res.status(400).render('wrong');
         }
 
-        console.log('Login successful for user:', user.email);
-        
+      
+
+        // Create a token for the logged-in user
         const token = createToken(user._id);
+
+        // Send token as a cookie and respond with success message
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-            .send({ message: 'Login successful' });
+            .render('games');
 
     } catch (err) {
         console.error(err);
         res.status(500).send({ message: 'Internal server error', error: err.message });
     }
 };
+
+module.exports = { signup, login };
 
 const logOut = (req, res) => {
     res.status(200)
