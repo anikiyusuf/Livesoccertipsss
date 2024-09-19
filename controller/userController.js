@@ -23,7 +23,7 @@ const signup = async (req, res) => {
         // Check if user already exists
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
-            return res.status(400).send({ message: "User already exists" });
+            return res.status(400).render("existing");
         }
 
         // Hash the password before saving to DB
@@ -64,7 +64,6 @@ const login = async (req, res) => {
         // Compare the entered password with the stored hashed password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            console.log('Login failed: Wrong password');
             return res.status(400).render('wrong');
         }
 
