@@ -2,7 +2,7 @@ require('dotenv').config();
 const UserModel = require("../models/userModel");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
-
+const nodemailer = require('nodemailer');
 const JWT_TOKEN = process.env.JWT_TOKEN;
 
 // Function to create a token
@@ -88,7 +88,6 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { signup, login };
 
 const logOut = (req, res) => {
     res.status(200)
@@ -96,24 +95,24 @@ const logOut = (req, res) => {
         .send({ message: 'Successfully logged out' });
 }
 
-
-const requestPasswordReset = async (req, res) => {
+const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await UserModel.findOne({ email });
 
+        const user = await UserModel.findOne({ email });
         if (!user) {
-            return res.status(400).send({ message: "User not found" });
+            return res.status(400).send({ message: 'User not found' });
         }
 
-        const otp = crypto.randomInt(100000, 999999).toString();
-        const otpExpiration = Date.now() + 3600000; // OTP expires in 1 hour
+        // Generate a random 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000);
 
-        user.resetPasswordToken = otp;
-        user.resetPasswordExpire = otpExpiration;
-        await user.save({ validateBeforeSave: false });
-
-        const transporter = nodemailer.createTransport({
+        // Set OTP and expiration time (10 minutes)
+        user.resetPasswordOtp = otp;  // Correctly assign the OTP to user
+        user.resetPasswordOtpExpires = Date.now() + 10 * 60 * 1000; // Current time + 10 minutes
+        await user.save();
+          
+            const transporter = nodemailer.createTransport({
             service: "Gmail",
             auth: {
                 user: process.env.EMAIL_USER,
@@ -130,47 +129,61 @@ const requestPasswordReset = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
+        // Simulate sending OTP to user's email (log for now)
+        // console.log(`Password reset OTP (email to be sent): ${otp}`);
 
-        res.status(200).send({ message: "OTP sent to your email" });
-
-  
+        res.status(200)
+        .render('resetpassword')
+        // send({ message: "OTP sent to your email" });
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Internal server error", error: err.message });
+        console.error('Error in forgot password:', err);
+        res.status(500).send({ message: 'Internal server error', error: err.message });
     }
 };
 
-const changePassword = async (req, res) => {
+const resetPasswordWithOtp = async (req, res) => {
     try {
-        const { email, newPassword, confirmNewPassword } = req.body;
+        // console.log(req.body);
+        const { email, otp, password, confirm_password } = req.body;
 
-        if (newPassword !== confirmNewPassword) {
-            return res.status(400).send({ message: "Passwords do not match" });
+        // Check if passwords match
+        if (password !== confirm_password) {
+            return res.status(400).send({ message: 'Passwords do not match' });
         }
 
-        const user = await UserModel.findOne({ email });
+        // Find user by email, OTP, and ensure OTP is not expired
+        const user = await UserModel.findOne({
+            email,
+            resetPasswordOtp: otp, // Correct field name
+            resetPasswordOtpExpires: { $gt: Date.now() } // Ensure OTP hasn't expired
+        });
 
         if (!user) {
-            return res.status(400).send({ message: "User not found" });
+            return res.status(400).send({ message: 'Invalid or expired OTP' });
         }
 
+        // Hash the new password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
+        // Update user's password and clear OTP fields
         user.password = hashedPassword;
-        user.resetPasswordToken = undefined;  
-        user.resetPasswordExpire = undefined; 
-        await user.save({ validateBeforeSave: false }); 
+        user.resetPasswordOtp = undefined; // Correct 'underfined' to 'undefined'
+        user.resetPasswordOtpExpires = undefined;
 
-        res.status(200).send({ message: "Password changed successfully" });
+        await user.save();
 
+            res.status(200).render('login')
+        //  res.status(200).send({ message: 'Password reset successful, you can now log in with your new password' });
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Internal server error", error: err.message });
+        console.log('Error in resetting password with OTP:', err);
+        res.status(500).send({ message: 'Internal server error', error: err.message });
     }
 };
 
-module.exports = { signup, login, logOut, requestPasswordReset, changePassword};
+
+
+module.exports = { signup, login, logOut, resetPasswordWithOtp, forgotPassword};
 
 
 
