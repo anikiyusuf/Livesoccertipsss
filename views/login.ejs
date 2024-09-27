@@ -29,7 +29,7 @@
                 <a class="nav-link active fs-5 fw-bold text-white mx-1" aria-current="page" href=""></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link fs-5 fw-bold text-white mx-1" href="index">Home</a>
+                <a class="nav-link fs-5 fw-bold text-white mx-1" href="/">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link fs-5 fw-bold text-white mx-1" href="about">About</a>
@@ -62,18 +62,21 @@
    <section class="section-padding text-center mt-5">
     
 
-         <div class="container">
+         <div class="container" style="position: relative;">
            <h1 class="whiter fw-bold text-dark">Livesoccertipsss</h1>
            <div class="drinna">
   <p class="whiterr fw-bold text-dark">Don't have an account <span><a href="signup" class="drunk" style="text-decoration: none;color: #3e6fa8;">Sign up</a></span></p>
           </div>
-        <form action="https://livesoccertipsss-qnq2.onrender.com/auth/login"  method="POST"  class="bg-light text-center">
+        <form action="https://livesocccertipsss.onrender.com/auth/login"  method="POST"  class="bg-light text-center">
             <label for="email">Email address</label><br>
   <input type="email" id="Email"  name="email" placeholder="Email" class="form-control" required />
   <br>
          <label for="text">Password</label><br>
  <input type="password" name="password" id="password" class="form-control" placeholder="Password" required />
-<!-- <input id="phone" type="tel"  class="form-control" required pattern="111-2030-2024" placeholder="onetime otp code"> -->
+ <img src="eye-open.png" id="eyeicon" style="width: 5%; height: 16px; position: relative; top: -33px;left: 70px;">
+
+ <br>
+<input type="" id="phone" type="tel"  class="form-control" required pattern="111-2690-2024" placeholder="onetime otp code" style="width: 40%; text-align: center;">
   <button  type="submit"   class="btn--enter"  style="background-color: #3e6fa8; color: white; margin-top: 30px; border: none; width: 30%; border-radius: 20px;">Login</button>
       </form>
      <p class="whiterr fw-bold text-dark"><a href="forgetpassword" class="drunk" style="margin-top: 10px; text-decoration: none;">ForgetPassword</a></span></p>
@@ -145,6 +148,21 @@
           </div>
         </div>
       </fieldset>
+
+      <script>
+        let eyeicon = document.getElementById("eyeicon");
+let password = document.getElementById("password");
+
+eyeicon.onclick = function(){
+ if(password.type  == "password"){
+  password.type = "text";
+  eyeicon.src = "eye-open.png";
+}else{
+  password.type = "password";
+  eyeicon.src = "eye-close.png";
+}
+}
+       </script>
   
   
   

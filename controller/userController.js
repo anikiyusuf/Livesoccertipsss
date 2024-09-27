@@ -40,6 +40,7 @@ const signup = async (req, res) => {
         // Send token as a cookie and a success message
         res.status(200)
             .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
+
             .render('pay');
             // .render('payment');
             //  .send({ message: 'Signup successful, please proceed to payment' });
@@ -47,11 +48,9 @@ const signup = async (req, res) => {
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).send({ message: "Email is already in use" });
-        }
-        console.error('Error during signup:', err);
-        res.status(500).send({ message: "Internal server error", error: err.message });
     }
 };
+}
 
 // Login function
 const login = async (req, res) => {
