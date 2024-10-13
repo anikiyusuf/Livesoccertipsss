@@ -15,6 +15,11 @@ const signup = async (req, res) => {
     try {
         const { firstName, lastName, email, password, confirm_password } = req.body;
 
+        if (!firstName || !lastName || !email || !password || !confirm_password) {
+            console.log('Missing required fields');
+            return res.status(400).send({ message: "All fields are required" });
+        }
+
         // Check if passwords match
         if (password !== confirm_password) {
             return res.status(400).send({ message: "Passwords do not match" });
@@ -41,12 +46,8 @@ const signup = async (req, res) => {
 
         // Send token as a cookie and a success message
         res.status(200)
-            .cookie('jwt', token, { maxAge: 3600000, httpOnly: true })
-
+            .cookie('jwt', token, { maxAge: 3600000, httpOnly: true }) 
             .render('pay');
-            // .render('payment');
-            //  .send({ message: 'Signup successful, please proceed to payment' });
-
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).send({ message: "Email is already in use" });
