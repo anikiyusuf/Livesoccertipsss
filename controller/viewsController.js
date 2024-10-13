@@ -21,10 +21,7 @@ const Pay = async (req,res) => {
 }
 const Signup = async (req,res) => {
     res.render('signup')
-
-    res.render('Pay')
 }
-
 
 const ForgetPassword = async(req,res) => {
     res.render('forgetpassword')
