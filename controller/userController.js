@@ -27,7 +27,9 @@ const signup = async (req, res) => {
         }
 
         // Hash the password before saving to DB
-        const salt = await bcrypt.genSalt(10);
+       
+        const saltRounds = 10; // Consider reducing to 8 if necessary
+        const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user and save to DB
@@ -48,8 +50,9 @@ const signup = async (req, res) => {
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).send({ message: "Email is already in use" });
+        }
+        res.status(500).send({ message: 'Internal server error', error: err.message });
     }
-};
 }
 
 // Login function
