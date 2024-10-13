@@ -149,6 +149,11 @@ const resetPasswordWithOtp = async (req, res) => {
         // console.log(req.body);
         const { email, otp, password, confirm_password } = req.body;
 
+        if (!email || !otp || !password || !confirm_password) {
+            console.log('Missing required fields');
+            return res.status(400).send({ message: "All fields are required" });
+        }
+
         // Check if passwords match
         if (password !== confirm_password) {
             return res.status(400).send({ message: 'Passwords do not match' });
@@ -166,7 +171,8 @@ const resetPasswordWithOtp = async (req, res) => {
         }
 
         // Hash the new password
-        const salt = await bcrypt.genSalt(10);
+        const saltRounds = 10; // You can adjust this value based on performance needs
+        const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Update user's password and clear OTP fields
