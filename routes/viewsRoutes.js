@@ -12,6 +12,7 @@ const express = require("express")
     ResetPassword,
     PasswordSent,
     Successful,
+    Success,
     error,
     
 } = require("../controller/viewsController")
@@ -30,6 +31,7 @@ viewRouter.get("/forgetpassword", ForgetPassword)
 viewRouter.get("/resetpassword", ResetPassword)
 viewRouter.get("/passwordsent", PasswordSent)
 viewRouter.get('/successuful', Successful)
+viewRouter.get("/success", Success)
 viewRouter.get("/error", error )
 
 

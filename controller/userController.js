@@ -28,7 +28,9 @@ const signup = async (req, res) => {
         // Check if user already exists
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
-            return res.status(400).send({ message: "User already exists" });
+            return res.status(400)
+            .render('exist')
+            // .send({ message: "User already exists" });
         }
 
         // Hash the password before saving to DB
@@ -181,9 +183,8 @@ const resetPasswordWithOtp = async (req, res) => {
         user.resetPasswordOtpExpires = undefined;
 
         await user.save();
-
-            res.status(200).render('login')
-        //  res.status(200).send({ message: 'Password reset successful, you can now log in with your new password' });
+        // res.status(200).render('success')
+          res.status(200).send({ message: 'Password reset successful, you can now log in with your new password' });
     } catch (err) {
         console.log('Error in resetting password with OTP:', err);
         res.status(500).send({ message: 'Internal server error', error: err.message });

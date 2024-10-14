@@ -40,6 +40,9 @@ const PasswordSent = async (req,res) =>{
 const Successful = async (req,res) =>{
     res.render('successful')
 }
+const Success = (req, res) => {
+    res.render('success');
+};
 
 module.exports = {
     homePage,
@@ -55,4 +58,5 @@ module.exports = {
     PasswordSent,
     Successful,
     error,
+    Success,
 }
